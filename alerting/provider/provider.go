@@ -3,6 +3,7 @@ package provider
 import (
 	"github.com/TwiN/gatus/v5/alerting/alert"
 	"github.com/TwiN/gatus/v5/alerting/provider/awsses"
+	"github.com/TwiN/gatus/v5/alerting/provider/clickup"
 	"github.com/TwiN/gatus/v5/alerting/provider/custom"
 	"github.com/TwiN/gatus/v5/alerting/provider/discord"
 	"github.com/TwiN/gatus/v5/alerting/provider/email"
@@ -73,6 +74,7 @@ func MergeProviderDefaultAlertIntoEndpointAlert(providerDefaultAlert, endpointAl
 var (
 	// Validate provider interface implementation on compile
 	_ AlertProvider = (*awsses.AlertProvider)(nil)
+	_ AlertProvider = (*clickup.AlertProvider)(nil)
 	_ AlertProvider = (*custom.AlertProvider)(nil)
 	_ AlertProvider = (*discord.AlertProvider)(nil)
 	_ AlertProvider = (*email.AlertProvider)(nil)
@@ -98,6 +100,7 @@ var (
 
 	// Validate config interface implementation on compile
 	_ Config[awsses.Config]         = (*awsses.Config)(nil)
+	_ Config[clickup.Config]        = (*clickup.Config)(nil)
 	_ Config[custom.Config]         = (*custom.Config)(nil)
 	_ Config[discord.Config]        = (*discord.Config)(nil)
 	_ Config[email.Config]          = (*email.Config)(nil)

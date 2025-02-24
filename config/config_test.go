@@ -12,6 +12,7 @@ import (
 	"github.com/TwiN/gatus/v5/alerting/alert"
 	"github.com/TwiN/gatus/v5/alerting/provider"
 	"github.com/TwiN/gatus/v5/alerting/provider/awsses"
+	"github.com/TwiN/gatus/v5/alerting/provider/clickup"
 	"github.com/TwiN/gatus/v5/alerting/provider/custom"
 	"github.com/TwiN/gatus/v5/alerting/provider/discord"
 	"github.com/TwiN/gatus/v5/alerting/provider/email"
@@ -124,7 +125,7 @@ endpoints:
 			name:       "dir-with-two-config-files",
 			configPath: dir,
 			pathAndFiles: map[string]string{
-				"config.yaml": `endpoints: 
+				"config.yaml": `endpoints:
   - name: one
     url: https://example.com
     conditions:
@@ -135,7 +136,7 @@ endpoints:
     url: https://example.org
     conditions:
       - "len([BODY]) > 0"`,
-				"config.yml": `endpoints: 
+				"config.yml": `endpoints:
   - name: three
     url: https://twin.sh/health
     conditions:
@@ -708,7 +709,7 @@ func TestParseAndValidateBadConfigBytes(t *testing.T) {
 	_, err := parseAndValidateConfigBytes([]byte(`
 badconfig:
   - asdsa: w0w
-    usadasdrl: asdxzczxc	
+    usadasdrl: asdxzczxc
     asdas:
       - soup
 `))
@@ -1879,6 +1880,7 @@ func TestParseAndValidateConfigBytesWithNoEndpoints(t *testing.T) {
 func TestGetAlertingProviderByAlertType(t *testing.T) {
 	alertingConfig := &alerting.Config{
 		AWSSimpleEmailService: &awsses.AlertProvider{},
+		ClickUp:               &clickup.AlertProvider{},
 		Custom:                &custom.AlertProvider{},
 		Discord:               &discord.AlertProvider{},
 		Email:                 &email.AlertProvider{},
@@ -1907,6 +1909,7 @@ func TestGetAlertingProviderByAlertType(t *testing.T) {
 		expected  provider.AlertProvider
 	}{
 		{alertType: alert.TypeAWSSES, expected: alertingConfig.AWSSimpleEmailService},
+		{alertType: alert.TypeClickUp, expected: alertingConfig.ClickUp},
 		{alertType: alert.TypeCustom, expected: alertingConfig.Custom},
 		{alertType: alert.TypeDiscord, expected: alertingConfig.Discord},
 		{alertType: alert.TypeEmail, expected: alertingConfig.Email},
